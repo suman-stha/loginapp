@@ -17,7 +17,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { LoginService } from './services/login.service';
+import { AuthGuard } from './auth.guard';
+import { AuthInterceptor } from './services/auth.interceptor';
 
 
 @NgModule({
@@ -42,8 +45,9 @@ import { HttpClientModule } from '@angular/common/http'
     FormsModule,
     HttpClientModule
 
+
   ],
-  providers: [],
+  providers: [LoginService, AuthGuard, [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }]],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

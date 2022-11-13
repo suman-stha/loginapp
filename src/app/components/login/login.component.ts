@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ export class LoginComponent implements OnInit {
     password: ''
   }
 
-  constructor() { }
+  constructor(private loginService: LoginService) { }
 
   ngOnInit(): void {
   }
@@ -24,7 +25,18 @@ export class LoginComponent implements OnInit {
       && (this.credentials.username != null && this.credentials.password != null)) {
       console.log("We have to submit the form to server.");
       //token generate
+      this.loginService.generateToken(this.credentials).subscribe(
+        (response: any) => {
+          console.log(response.token);
 
+          this.loginService.loginUser(response.token)
+          window.location.href = "/dashboard"
+        },
+        error => {
+          console.log(error);
+        }
+
+      );
 
     } else {
       console.log("Fields are empty");
